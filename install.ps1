@@ -27,6 +27,18 @@ Expand-Archive $zipPath -DestinationPath $extractPath -Force
 # ZIP sil
 Remove-Item $zipPath -Force
 
+# Turkce BUYUK İ karakteri
+$TurkceI = [char]0x0130
+
+Get-ChildItem $extractPath -Recurse -Filter "*.application" | ForEach-Object {
+    $correctName = "Moreeemm ${TurkceI}nstaller v10 2026.application"
+    $newPath = Join-Path $_.DirectoryName $correctName
+
+    if ($_.FullName -ne $newPath) {
+        Rename-Item $_.FullName $newPath -Force
+    }
+}
+
 # setup.exe bul
 $setupExe = Get-ChildItem $extractPath -Recurse -Filter setup.exe | Select-Object -First 1
 
