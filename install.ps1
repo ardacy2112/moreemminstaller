@@ -39,6 +39,25 @@ Get-ChildItem $extractPath -Recurse -Filter "*.application" | ForEach-Object {
     }
 }
 
+
+# ===== CLICKONCE APPLICATION FILES TURKCE İ FIX =====
+
+$TurkceI = [char]0x0130
+$appFilesPath = Join-Path $extractPath "Application Files"
+
+if (Test-Path $appFilesPath) {
+    Get-ChildItem $appFilesPath -Directory | ForEach-Object {
+
+        # Hedef klasör adı (DOĞRU)
+        $correctName = "Moreeemm ${TurkceI}nstaller v10 2026_10_0_0_0"
+        $correctPath = Join-Path $appFilesPath $correctName
+
+        if ($_.FullName -ne $correctPath) {
+            Rename-Item $_.FullName $correctPath -Force
+        }
+    }
+}
+
 # setup.exe bul
 $setupExe = Get-ChildItem $extractPath -Recurse -Filter setup.exe | Select-Object -First 1
 
