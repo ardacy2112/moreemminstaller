@@ -59,24 +59,29 @@ if (Test-Path $appFilesPath) {
 }
 
 
-# ===== APPLICATION FILES / IC KLASOR DOSYA ADI TURKCE İ FIX =====
+# ===== APPLICATION FILES IC DOSYA ADI ZORLA FIX =====
 
 $TurkceI = [char]0x0130
 $appFilesRoot = Join-Path $extractPath "Application Files"
 
-# Moreeemm İnstaller ile başlayan klasörü bul
-$targetFolder = Get-ChildItem $appFilesRoot -Directory |
-    Where-Object { $_.Name -like "Moreeemm İnstaller v10 2026_10_0_0_0" } |
-    Select-Object -First 1
+if (!(Test-Path $appFilesRoot)) {
+    Write-Host "Application Files bulunamadi!" -ForegroundColor Red
+    return
+}
 
-if ($targetFolder) {
-    Get-ChildItem $targetFolder.FullName -File | ForEach-Object {
+Write-Host "Application Files bulundu:" $appFilesRoot
 
-        if ($_.Name -match "Installer" -and $_.Name -notmatch $TurkceI) {
+Get-ChildItem $appFilesRoot -Recurse -File | ForEach-Object {
 
-            $newName = $_.Name -replace "Installer", "${TurkceI}nstaller"
-            $newPath = Join-Path $_.DirectoryName $newName
+    Write-Host "Kontrol:" $_.FullName
 
+    if ($_.Name -match "Installer") {
+
+        $newName = $_.Name -replace "Installer", "${TurkceI}nstaller"
+        $newPath = Join-Path $_.DirectoryName $newName
+
+        if ($_.FullName -ne $newPath) {
+            Write-Host "Degistiriliyor -> $newName" -ForegroundColor Yellow
             Rename-Item $_.FullName $newPath -Force
         }
     }
