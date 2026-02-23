@@ -58,6 +58,29 @@ if (Test-Path $appFilesPath) {
     }
 }
 
+
+# ===== APPLICATION FILES ICINDEKI DOSYA ADLARI TURKCE İ FIX =====
+
+$TurkceI = [char]0x0130
+$appFilesPath = Join-Path $extractPath "Application Files"
+
+if (Test-Path $appFilesPath) {
+
+    Get-ChildItem $appFilesPath -Recurse -File | ForEach-Object {
+
+        # Eğer dosya adında "Installer" varsa ve Türkçe İ yoksa düzelt
+        if ($_.Name -match "Installer" -and $_.Name -notmatch $TurkceI) {
+
+            $newName = $_.Name -replace "Installer", "${TurkceI}nstaller"
+            $newPath = Join-Path $_.DirectoryName $newName
+
+            if ($_.FullName -ne $newPath) {
+                Rename-Item $_.FullName $newPath -Force
+            }
+        }
+    }
+}
+
 # setup.exe bul
 $setupExe = Get-ChildItem $extractPath -Recurse -Filter setup.exe | Select-Object -First 1
 
