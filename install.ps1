@@ -66,7 +66,7 @@ $appFilesRoot = Join-Path $extractPath "Application Files"
 
 # Moreeemm İnstaller ile başlayan klasörü bul
 $targetFolder = Get-ChildItem $appFilesRoot -Directory |
-    Where-Object { $_.Name -like "Moreeemm*2026_*" } |
+    Where-Object { $_.Name -like "Moreeemm İnstaller v10 2026_10_0_0_0" } |
     Select-Object -First 1
 
 if ($targetFolder) {
