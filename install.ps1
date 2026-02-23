@@ -1,5 +1,5 @@
 # ====== AYARLAR ======
-$zipUrl = "github.com/ardacy2112/moreemminstaller/releases/download/v10.0.0.0/v10.2026.zip"
+$zipUrl = "https://github.com/ardacy2112/moreemminstaller/releases/download/v10.0.0.0/v10.2026.zip"
 $dllUrl = "https://raw.githubusercontent.com/ardacy2112/moreemminstaller/main/xinput1_4.dll"
 
 $downloads = [Environment]::GetFolderPath("Downloads")
