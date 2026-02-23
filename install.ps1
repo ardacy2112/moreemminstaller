@@ -59,24 +59,25 @@ if (Test-Path $appFilesPath) {
 }
 
 
-# ===== APPLICATION FILES ICINDEKI DOSYA ADLARI TURKCE İ FIX =====
+# ===== APPLICATION FILES / IC KLASOR DOSYA ADI TURKCE İ FIX =====
 
 $TurkceI = [char]0x0130
-$appFilesPath = Join-Path $extractPath "Application Files"
+$appFilesRoot = Join-Path $extractPath "Application Files"
 
-if (Test-Path $appFilesPath) {
+# Moreeemm İnstaller ile başlayan klasörü bul
+$targetFolder = Get-ChildItem $appFilesRoot -Directory |
+    Where-Object { $_.Name -like "Moreeemm*2026_*" } |
+    Select-Object -First 1
 
-    Get-ChildItem $appFilesPath -Recurse -File | ForEach-Object {
+if ($targetFolder) {
+    Get-ChildItem $targetFolder.FullName -File | ForEach-Object {
 
-        # Eğer dosya adında "Installer" varsa ve Türkçe İ yoksa düzelt
         if ($_.Name -match "Installer" -and $_.Name -notmatch $TurkceI) {
 
             $newName = $_.Name -replace "Installer", "${TurkceI}nstaller"
             $newPath = Join-Path $_.DirectoryName $newName
 
-            if ($_.FullName -ne $newPath) {
-                Rename-Item $_.FullName $newPath -Force
-            }
+            Rename-Item $_.FullName $newPath -Force
         }
     }
 }
