@@ -27,65 +27,6 @@ Expand-Archive $zipPath -DestinationPath $extractPath -Force
 # ZIP sil
 Remove-Item $zipPath -Force
 
-# Turkce BUYUK İ karakteri
-$TurkceI = [char]0x0130
-
-Get-ChildItem $extractPath -Recurse -Filter "*.application" | ForEach-Object {
-    $correctName = "Moreeemm ${TurkceI}nstaller v10 2026.application"
-    $newPath = Join-Path $_.DirectoryName $correctName
-
-    if ($_.FullName -ne $newPath) {
-        Rename-Item $_.FullName $newPath -Force
-    }
-}
-
-
-# ===== CLICKONCE APPLICATION FILES TURKCE İ FIX =====
-
-$TurkceI = [char]0x0130
-$appFilesPath = Join-Path $extractPath "Application Files"
-
-if (Test-Path $appFilesPath) {
-    Get-ChildItem $appFilesPath -Directory | ForEach-Object {
-
-        # Hedef klasör adı (DOĞRU)
-        $correctName = "Moreeemm ${TurkceI}nstaller v10 2026_10_0_0_0"
-        $correctPath = Join-Path $appFilesPath $correctName
-
-        if ($_.FullName -ne $correctPath) {
-            Rename-Item $_.FullName $correctPath -Force
-        }
-    }
-}
-
-
-# ===== APPLICATION FILES IC DOSYA ADI ZORLA FIX =====
-
-$TurkceI = [char]0x0130
-$appFilesRoot = Join-Path $extractPath "Application Files"
-
-if (!(Test-Path $appFilesRoot)) {
-    Write-Host "Application Files bulunamadi!" -ForegroundColor Red
-    return
-}
-
-Write-Host "Application Files bulundu:" $appFilesRoot
-
-Get-ChildItem $appFilesRoot -Recurse -File | ForEach-Object {
-
-    Write-Host "Kontrol:" $_.FullName
-
-    if ($_.Name -match "Installer") {
-
-        $newName = $_.Name -replace "Installer", "${TurkceI}nstaller"
-        $newPath = Join-Path $_.DirectoryName $newName
-
-        if ($_.FullName -ne $newPath) {
-            Write-Host "Degistiriliyor -> $newName" -ForegroundColor Yellow
-            Rename-Item $_.FullName $newPath -Force
-        }
-    }
-}
 
 # setup.exe bul
 $setupExe = Get-ChildItem $extractPath -Recurse -Filter setup.exe | Select-Object -First 1
