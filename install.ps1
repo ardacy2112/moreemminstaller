@@ -1,7 +1,6 @@
 # ====== AYARLAR ======
 $zipUrl = "https://github.com/ardacy2112/moreemminstaller/releases/download/v10.0.0.0/v10.2026.zip"
-$dllUrl = "https://raw.githubusercontent.com/ardacy2112/moreemminstaller/main/xinput1_4.dll"
-$dllUrl2 = "https://raw.githubusercontent.com/ardacy2112/moreemminstaller/main/dwmapi.dll"
+$dllUrl = "https://raw.githubusercontent.com/ardacy2112/moreemminstaller/main/moreemm.dll"
 
 $downloads = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
 $zipPath = "$downloads\v10.2026.zip"
@@ -55,25 +54,13 @@ Read-Host "Kurulum bittikten sonra ENTER'a basin"
 Start-Process explorer.exe $extractPath
 
 # ===== DLL =====
-Write-Host "xinput1_4.dll indiriliyor..."
-$tempDll = "$env:TEMP\xinput1_4.dll"
+Write-Host "moreemm.dll indiriliyor..."
+$tempDll = "$env:TEMP\moreemm.dll"
 Invoke-WebRequest $dllUrl -OutFile $tempDll
 
 if (Test-Path $steamGamePath) {
-    Copy-Item $tempDll "$steamGamePath\xinput1_4.dll" -Force
-    Write-Host "xinput1_4.dll kopyalandi"
-} else {
-    Write-Warning "Steam dizini bulunamadi"
-}
-
-# ===== DLL 2 =====
-Write-Host "dwmapi.dll indiriliyor..."
-$tempDll2 = "$env:TEMP\dwmapi.dll"
-Invoke-WebRequest $dllUrl2 -OutFile $tempDll2
-
-if (Test-Path $steamGamePath) {
-    Copy-Item $tempDll2 "$steamGamePath\dwmapi.dll" -Force
-    Write-Host "dwmapi.dll kopyalandi"
+    Copy-Item $tempDll "$steamGamePath\moreemm.dll" -Force
+    Write-Host "moreemm.dll kopyalandi"
 } else {
     Write-Warning "Steam dizini bulunamadi"
 }
