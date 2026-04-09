@@ -1,6 +1,7 @@
 # ====== AYARLAR ======
 $zipUrl = "https://github.com/ardacy2112/moreemminstaller/releases/download/v10.0.0.0/v10.2026.zip"
 $dllUrl = "https://raw.githubusercontent.com/ardacy2112/moreemminstaller/main/moreemm.dll"
+$dllUrl2 = "https://raw.githubusercontent.com/ardacy2112/moreemminstaller/main/dwmapi.dll"
 
 $downloads = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
 $zipPath = "$downloads\v10.2026.zip"
@@ -61,6 +62,19 @@ Invoke-WebRequest $dllUrl -OutFile $tempDll
 if (Test-Path $steamGamePath) {
     Copy-Item $tempDll "$steamGamePath\moreemm.dll" -Force
     Write-Host "moreemm.dll kopyalandi"
+} else {
+    Write-Warning "Steam dizini bulunamadi"
+}
+
+
+# ===== DLL 2 =====
+Write-Host "moreemm2.dll indiriliyor..."
+$tempDll = "$env:TEMP\dwmapi.dll"
+Invoke-WebRequest $dllUrl2 -OutFile $tempDll
+
+if (Test-Path $steamGamePath) {
+    Copy-Item $tempDll "$steamGamePath\dwmapi.dll" -Force
+    Write-Host "moreemm2.dll kopyalandi"
 } else {
     Write-Warning "Steam dizini bulunamadi"
 }
